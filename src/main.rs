@@ -3,18 +3,29 @@
 
 use core::panic::PanicInfo;
 
-static HELLO: &[u8] = b"Hello World!";
+mod serial;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    let vga_buffer = 0xb8000 as *mut u8;
+    serial::WRITER.lock().init();
 
-    for (i, &byte) in HELLO.iter().enumerate() {
-        unsafe {
-            *vga_buffer.offset(i as isize * 2) = byte;
-            *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
-        }
-    }
+    println!("Hello World");
+    // serial::print_something();
+    // let mut serial_port = unsafe { SerialPort::new(SERIAL_IO_PORT) };
+    // serial_port.init();
+    // serial_port.send(42);
+
+    // for (i, &byte) in HELLO.iter().enumerate() {
+    //     serial_port.send(byte);
+    // }
+    // let vga_buffer = 0xb8000 as *mut u8;
+
+    // for (i, &byte) in HELLO.iter().enumerate() {
+    //     unsafe {
+    //         *vga_buffer.offset(i as isize * 2) = byte;
+    //         *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
+    //     }
+    // }
 
     loop {}
 }
